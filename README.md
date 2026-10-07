@@ -7,8 +7,6 @@ Material de apoyo para el curso de Termodinámica. Son cuatro guías interactiva
 3. **Constructor de ciclos**: arma ciclos con procesos isotérmicos, isobáricos, isocóricos y adiabáticos, y verifica tus cálculos.
 4. **U y H de gases reales**: coeficientes de Joule y de Joule–Thomson, curva de inversión, y C<sub>v</sub> y C<sub>p</sub> de distintas sustancias.
 
-**Sitio:** https://USUARIO.github.io/REPOSITORIO/
-
 ## Uso
 
 - **En línea:** abre el sitio.
@@ -21,7 +19,7 @@ Material de apoyo para el curso de Termodinámica. Son cuatro guías interactiva
 
 ## Cómo citar
 
-Strupiechonski, E., & de Luna Bugallo, A. (2026). *Guías interactivas de Termodinámica* (v1.0) [software]. https://USUARIO.github.io/REPOSITORIO/
+Strupiechonski, E., & de Luna Bugallo, A. (2026). *Guías interactivas de Termodinámica* (v1.0) [software].
 
 Véase también [CITATION.cff](CITATION.cff).
 
