@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "Si usas este material, por favor cítalo como se indica abajo."
+type: software
+title: "Guías interactivas de Termodinámica"
+version: "1.0"
+date-released: "2026-10-07"
+license: CC-BY-4.0
+url: "https://USUARIO.github.io/REPOSITORIO/"
+authors:
+  - family-names: "Strupiechonski"
+    given-names: "Elodie"
+    affiliation: "ENES Juriquilla, UNAM"
+    orcid: "https://orcid.org/0000-0001-8991-8499"
+  - family-names: "de Luna Bugallo"
+    given-names: "Andrés"
+    affiliation: "CFATA, UNAM"
+    orcid: "https://orcid.org/0000-0002-7591-5235"
+keywords:
+  - termodinámica
+  - docencia
+  - gas ideal
+  - van der Waals
+  - ciclos termodinámicos
+  - Joule-Thomson
