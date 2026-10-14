@@ -1,11 +1,12 @@
 # Guías interactivas de Termodinámica
 
-Material de apoyo para el curso de Termodinámica. Son cuatro guías interactivas que se abren en el navegador:
+Material de apoyo para el curso de Termodinámica. Son cinco guías interactivas que se abren en el navegador:
 
 1. **Laboratorio PVT**: gas ideal y gas de van der Waals, factor Z y diagrama P–V.
 2. **Dos caminos de A a C**: w, q, ΔU y ΔH por dos trayectorias entre los mismos estados.
 3. **Constructor de ciclos**: arma ciclos con procesos isotérmicos, isobáricos, isocóricos y adiabáticos, y verifica tus cálculos.
 4. **U y H de gases reales**: coeficientes de Joule y de Joule–Thomson, curva de inversión, y C<sub>v</sub> y C<sub>p</sub> de distintas sustancias.
+5. **Motores térmicos**: ciclos de Stirling, máquina de vapor, Otto, motor real con pérdidas, turbina de gas (Brayton) y motor eléctrico, con animaciones, simulaciones y derivaciones.
 
 ## Uso
 
@@ -19,7 +20,7 @@ Material de apoyo para el curso de Termodinámica. Son cuatro guías interactiva
 
 ## Cómo citar
 
-Strupiechonski, E., & de Luna Bugallo, A. (2026). *Guías interactivas de Termodinámica* (v1.0) [software].
+Strupiechonski, E., & de Luna Bugallo, A. (2026). *Guías interactivas de Termodinámica* (v1.1) [software].
 
 Véase también [CITATION.cff](CITATION.cff).
 
@@ -27,4 +28,4 @@ Véase también [CITATION.cff](CITATION.cff).
 
 Creative Commons Attribution 4.0 International (CC BY 4.0). Véase [LICENSE](LICENSE).
 
-Las tipografías incluidas en `index.html` (Spectral, Atkinson Hyperlegible, JetBrains Mono, Big Shoulders Display, IBM Plex Sans e IBM Plex Mono) se distribuyen bajo la SIL Open Font License 1.1.
+Las tipografías incluidas en `index.html` (Spectral, EB Garamond, Atkinson Hyperlegible, JetBrains Mono, Big Shoulders Display, IBM Plex Sans e IBM Plex Mono) se distribuyen bajo la SIL Open Font License 1.1.

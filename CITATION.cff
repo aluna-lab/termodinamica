@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "Si usas este material, por favor cítalo como se indica abajo."
 type: software
 title: "Guías interactivas de Termodinámica"
-version: "1.0"
-date-released: "2026-10-07"
+version: "1.1"
+date-released: "2026-10-14"
 license: CC-BY-4.0
 authors:
   - family-names: "Strupiechonski"
@@ -21,3 +21,6 @@ keywords:
   - van der Waals
   - ciclos termodinámicos
   - Joule-Thomson
+  - motores térmicos
+  - ciclo de Brayton
+  - motor eléctrico
