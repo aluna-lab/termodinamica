@@ -1,12 +1,14 @@
 # Guías interactivas de Termodinámica
 
-Material de apoyo para el curso de Termodinámica. Son cinco guías interactivas que se abren en el navegador:
+Material de apoyo para el curso de Termodinámica. Son siete guías que se abren en el navegador:
 
 1. **Laboratorio PVT**: gas ideal y gas de van der Waals, factor Z y diagrama P–V.
 2. **Dos caminos de A a C**: w, q, ΔU y ΔH por dos trayectorias entre los mismos estados.
 3. **Constructor de ciclos**: arma ciclos con procesos isotérmicos, isobáricos, isocóricos y adiabáticos, y verifica tus cálculos.
 4. **U y H de gases reales**: coeficientes de Joule y de Joule–Thomson, curva de inversión, y C<sub>v</sub> y C<sub>p</sub> de distintas sustancias.
 5. **Motores térmicos**: ciclos de Stirling, máquina de vapor, Otto, motor real con pérdidas, turbina de gas (Brayton) y motor eléctrico, con animaciones, simulaciones y derivaciones.
+6. **Entropía de reacción** (presentación): entropía molar absoluta, cálculo de S° a partir de calorimetría, ΔS° con tablas, la segunda ley y la síntesis de amoníaco.
+7. **Calculadora de ΔS°**: arma una reacción con coeficientes y obtén ΔS° con barras de aporte; después recorre la trayectoria calorimétrica del agua.
 
 ## Uso
 
@@ -20,7 +22,7 @@ Material de apoyo para el curso de Termodinámica. Son cinco guías interactivas
 
 ## Cómo citar
 
-Strupiechonski, E., & de Luna Bugallo, A. (2026). *Guías interactivas de Termodinámica* (v1.1) [software].
+Strupiechonski, E., & de Luna Bugallo, A. (2026). *Guías interactivas de Termodinámica* (v1.2) [software].
 
 Véase también [CITATION.cff](CITATION.cff).
 

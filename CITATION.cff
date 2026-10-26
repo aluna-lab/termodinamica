@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "Si usas este material, por favor cítalo como se indica abajo."
 type: software
 title: "Guías interactivas de Termodinámica"
-version: "1.1"
-date-released: "2026-10-14"
+version: "1.2"
+date-released: "2026-10-26"
 license: CC-BY-4.0
 authors:
   - family-names: "Strupiechonski"
@@ -24,3 +24,6 @@ keywords:
   - motores térmicos
   - ciclo de Brayton
   - motor eléctrico
+  - entropía de reacción
+  - entropía molar
+  - cambio de entropía ΔS°
