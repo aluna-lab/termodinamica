@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Tercer principio de la termodinámica</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600;6..72,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [["$", "$"]], displayMath: [["$$", "$$"]] },
+  svg: { fontCache: "global" },
+  startup: { typeset: true }
+};
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style>
+/* Plan: cuaderno de laboratorio criogénico. Papel frío, tinta azul profunda,
+   un solo acento de hielo y un naranja reservado para el calor (entropía que se va). */
+:root {
+  color-scheme: light;
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --ink: #132033;
+  --muted: #4d5d70;
+  --rule: #d5dde6;
+  --ice: #1f7fae;
+  --heat: #c25a1e;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0e1620;
+    --surface: #152131;
+    --ink: #e6edf5;
+    --muted: #9badc0;
+    --rule: #2a3a4f;
+    --ice: #6cc4ea;
+    --heat: #f09a5e;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e1620;
+  --surface: #152131;
+  --ink: #e6edf5;
+  --muted: #9badc0;
+  --rule: #2a3a4f;
+  --ice: #6cc4ea;
+  --heat: #f09a5e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.6 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+main { max-width: 760px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.2; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2rem, 6vw, 3rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.6rem; margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--rule); }
+h3 { font-size: 1.15rem; margin-top: 24px; }
+p { margin: 12px 0; max-width: 66ch; }
+.kicker { font: 500 12px/1.2 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ice); }
+.lede { font-size: 1.12rem; color: var(--muted); margin-top: 14px; }
+.sec-no { font: 500 12px var(--mono); color: var(--muted); margin-bottom: 6px; display: block; }
+.eq { overflow-x: auto; padding: 4px 0; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 18px; margin: 18px 0; }
+.card.key { border-left: 3px solid var(--ice); }
+.card.heat { border-left: 3px solid var(--heat); }
+.lbl { font: 500 12px var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.row { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; }
+.row > * { min-width: 0; }
+label { display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: var(--muted); }
+input[type="range"] { width: min(260px, 100%); accent-color: var(--ice); }
+input[type="number"], select {
+  font: 15px var(--mono); color: var(--ink); background: var(--bg);
+  border: 1px solid var(--rule); border-radius: 4px; padding: 6px 8px; width: 9.5rem; max-width: 100%;
+}
+select { font-family: var(--body); width: auto; }
+.out { font: 500 1.5rem var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+.out small { font: 400 13px var(--body); color: var(--muted); margin-left: 4px; }
+.out.warn { color: var(--heat); }
+.note { font-size: 14px; color: var(--muted); }
+button {
+  font: 500 14px var(--body); color: var(--ink); background: var(--surface);
+  border: 1px solid var(--ice); border-radius: 4px; padding: 8px 14px; cursor: pointer;
+}
+button:hover { background: var(--ice); color: #fff; }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--ice); outline-offset: 2px; }
+button[aria-pressed="true"] { background: var(--ice); color: #fff; }
+canvas { display: block; width: 100%; height: auto; max-width: 100%; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 500 12px var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.law { font-family: var(--display); font-size: 1.12rem; }
+.law-name { font: 600 13px var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ice); margin-top: 18px; display: block; }
+ol.steps { padding-left: 1.2em; }
+ol.steps li { margin: 6px 0; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 6px; }
+.sw { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+.stage-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.stage-note { font-size: 14px; color: var(--muted); min-height: 3.2em; margin: 10px 0 0; }
+footer { margin-top: 56px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <span class="kicker">Termodinámica · Segundo parcial, material de apoyo</span>
+  <h1 style="margin-top:10px">Tercer principio de la termodinámica</h1>
+  <p class="lede">Cómo la entropía de una sustancia se fija en el cero absoluto, por qué no podemos llegar a él y qué hacen los físicos para acercarse.</p>
+</header>
+
+<!-- 1 -->
+<h2><span class="sec-no">01</span>Entropía en un cambio de fase</h2>
+<p>En un cambio de fase a presión constante y temperatura de equilibrio <span class="law">$T_{eq}$</span>, el proceso es reversible. Por eso el cambio de entropía sale directamente del calor latente:</p>
+<p class="eq">$$\Delta S = \frac{Q_{rev}}{T_{eq}} = \frac{\Delta H}{T_{eq}}$$</p>
+<div class="card key">
+  <div class="row">
+    <label>Sustancia y proceso
+      <select id="fase-sel">
+        <option value="6010;273.15">Agua, fusión (273.15 K)</option>
+        <option value="40660;373.15">Agua, vaporización (373.15 K)</option>
+        <option value="custom">Personalizado</option>
+      </select>
+    </label>
+    <label>$\Delta H$ (J/mol)
+      <input id="dh" type="number" value="6010" step="10">
+    </label>
+    <label>$T_{eq}$ (K)
+      <input id="teq" type="number" value="273.15" step="0.01">
+    </label>
+  </div>
+  <p style="margin-top:16px"><span class="lbl">$\Delta S$ del cambio</span><br>
+  <span id="dsfase" class="out">22.0<small>J/(mol·K)</small></span></p>
+</div>
+<p class="note">Con el agua, la fusión es de unos 22 J/(mol·K) y la vaporización de unos 109 J/(mol·K). El vapor tiene mucho más desorden que el líquido, y por eso el salto de entropía es cinco veces mayor.</p>
+
+<!-- 2 -->
+<h2><span class="sec-no">02</span>De la primera y la segunda ley a S(T, P)</h2>
+<p>Partimos de dos hechos. La primera ley da $dU = \delta Q - \delta W$. Para un proceso reversible de un sistema simple, $\delta Q_{rev} = T\,dS$ y $\delta W_{rev} = P\,dV$. Juntos dan la primera ecuación fundamental:</p>
+<p class="eq">$$dU = T\,dS - P\,dV$$</p>
+<p>Si usamos la entalpía, $H = U + PV$, y sumamos $d(PV) = P\,dV + V\,dP$, obtenemos la segunda:</p>
+<p class="eq">$$dH = T\,dS + V\,dP$$</p>
+<p>La segunda ecuación da la entropía en función de presión y temperatura. Despejamos $dS$ y usamos $dH = C_P\,dT + \left[V - T\left(\tfrac{\partial V}{\partial T}\right)_P\right]dP$:</p>
+<p class="eq">$$dS = \frac{C_P}{T}\,dT - \left(\frac{\partial V}{\partial T}\right)_P dP$$</p>
+<p>De ahí se leen dos derivadas parciales:</p>
+<p class="eq">$$\left(\frac{\partial S}{\partial T}\right)_P = \frac{C_P}{T}, \qquad \left(\frac{\partial S}{\partial P}\right)_T = -\left(\frac{\partial V}{\partial T}\right)_P$$</p>
+<h3>Primero, T constante: S como función de P</h3>
+<p>Con $T$ fija, la segunda derivada dice cómo cambia $S$ al variar $P$. Para un gas ideal, $(\partial V/\partial T)_P = nR/P$, así que $S$ baja al aumentar la presión:</p>
+<p class="eq">$$S(T,P) - S(T,P_0) = -nR\ln\frac{P}{P_0}$$</p>
+<h3>Después, P constante: S como función de T</h3>
+<p>Con $P$ fija, integramos la primera derivada desde una temperatura de referencia:</p>
+<p class="eq">$$S(T,P) = S(T_0,P) + \int_{T_0}^{T}\frac{C_P(T')}{T'}\,dT'$$</p>
+<p>Juntando las dos partes, para un gas ideal con $C_P$ constante:</p>
+<p class="eq">$$S(T,P) = S_0 + n C_P \ln\frac{T}{T_0} - nR\ln\frac{P}{P_0}$$</p>
+
+<div class="card key">
+  <p class="lbl" style="margin-top:0">Explore $S(T,P)$ para 1 mol de gas monoatómico ($C_P = \tfrac52 R$), con referencia $S_0 = 150.0$ J/(mol·K) a 298 K y 1 atm</p>
+  <div class="row">
+    <label style="flex:1 1 220px">Temperatura: <span id="tv" class="num">298</span> K
+      <input id="tslide" type="range" min="100" max="600" step="1" value="298">
+    </label>
+    <label style="flex:1 1 220px">Presión: <span id="pv">1.00</span> atm
+      <input id="pslide" type="range" min="0.1" max="10" step="0.01" value="1">
+    </label>
+  </div>
+  <p><span class="lbl">$S(T,P)$</span><br><span id="sTP" class="out">150.0<small>J/(mol·K)</small></span></p>
+</div>
+
+<h3>El problema aparece cuando T tiende a cero</h3>
+<p>La integral $\int C_P/T\,dT$ depende de cómo se comporta $C_P$ cerca del cero absoluto. Si $C_P$ se queda constante, la integral diverge logarítmicamente y $S$ tiende a $-\infty$. Eso no puede ser cierto: la entropía es un número no negativo que mide el desorden. La salida está en el comportamiento real de $C_P$. Las mediciones calorimétricas muestran que $C_P \to 0$ cuando $T \to 0$, y así la integral converge.</p>
+<div class="card">
+  <p class="lbl" style="margin-top:0">Dos modelos de $S(T)$ para una sustancia, con $S$ conocida a 10 K</p>
+  <canvas id="plotS" width="720" height="380" role="img" aria-label="Gráfica de S frente a T para dos modelos"></canvas>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--heat)"></span>$C_P$ constante (gas ideal, sin significado a bajas T)</span>
+    <span><span class="sw" style="background:var(--ice)"></span>$C_P \propto T^3$ (sólido, modelo de Debye)</span>
+  </div>
+  <div class="row" style="margin-top:14px">
+    <label style="flex:1 1 240px">Temperatura: <span id="tcv">5.0</span> K
+      <input id="tcslide" type="range" min="0.5" max="30" step="0.1" value="5">
+    </label>
+  </div>
+  <p class="note">Las dos curvas coinciden a 10 K, donde se fijó el valor medido. Por debajo de ese punto, el modelo de $C_P$ constante se hunde a valores negativos. El modelo de sólido se acerca a cero.</p>
+</div>
+
+<!-- 3 -->
+<h2><span class="sec-no">03</span>Los enunciados de Nernst y de Planck</h2>
+<div class="card key">
+  <span class="law-name">Enunciado de Nernst (teorema del calor, 1906)</span>
+  <p class="law" style="margin-bottom:0">Para cualquier proceso isotérmico reversible entre estados de equilibrio de un sistema condensado, la variación de entropía tiende a cero cuando la temperatura tiende a cero:</p>
+  <p class="eq" style="margin-top:8px">$$\lim_{T\to 0}\Delta S = 0$$</p>
+  <span class="law-name">Enunciado de Planck (1912)</span>
+  <p class="law" style="margin-bottom:0">La entropía de todo cristal perfecto tiende a cero cuando la temperatura tiende a cero:</p>
+  <p class="eq" style="margin-top:8px">$$\lim_{T\to 0}S = 0$$</p>
+</div>
+<p>Nernst mide la <em>variación</em> de entropía y Planck fija el <em>valor</em> de $S$ en el cero absoluto. Las dos ideas se conectan: si $\Delta S \to 0$ en todo proceso isotérmico, entonces $C_P \to 0$, y la integral de la sección 2 converge.</p>
+<p>Planck tiene excepciones que vale la pena mencionar. Un hielo común conserva una entropía residual de unos 3.4 J/(mol·K), que es $R\ln(3/2)$. Esto ocurre porque sus protones pueden ordenarse de varias maneras sin que el cristal lo note. Un vidrio también conserva entropía residual. Por eso Planck habla de cristal perfecto.</p>
+<div class="card heat">
+  <span class="law-name">Consecuencia: el cero absoluto es inalcanzable</span>
+  <p style="margin-bottom:0">Enfriar significa extraer entropía de la sustancia y enviarla al entorno. Cada paso reduce la temperatura, pero cada vez se requiere más esfuerzo para el mismo descenso. Ningún número finito de pasos lleva a $T = 0$. El tercer principio se enuncia también así.</p>
+</div>
+
+<!-- 4 -->
+<h2><span class="sec-no">04</span>Quién intenta bajar la temperatura, y hasta dónde</h2>
+<p>Bajar la temperatura es una línea de investigación activa. Cada técnica se detiene en un límite distinto:</p>
+<div class="scroll">
+<table>
+  <thead><tr><th>Técnica</th><th class="num">Temperatura alcanzada</th><th>Idea principal</th></tr></thead>
+  <tbody>
+    <tr><td>Refrigeración convencional</td><td class="num">≈ 1 K y más</td><td>Compresión y expansión de gases; los gases licúan cerca de 4 K.</td></tr>
+    <tr><td>Desmagnetización adiabática (Giauque, 1933)</td><td class="num">≈ 0.25 K</td><td>Se ordenan los espines magnéticos con un campo; al quitarlo, se desordenan y absorben calor del entorno.</td></tr>
+    <tr><td>Dilución de ³He en ⁴He</td><td class="num">≈ mK</td><td>Mezclar ³He en ⁴He absorbe calor. Es el método de los refrigeradores de experimentos en computación cuántica.</td></tr>
+    <tr><td>Desmagnetización nuclear</td><td class="num">≈ µK</td><td>Igual que la anterior, pero con los espines de los núcleos.</td></tr>
+    <tr><td>Enfriamiento láser y evaporativo de átomos</td><td class="num">≈ nK</td><td>Átomos atrapados en un campo magnético u óptico. Ver sección 05.</td></tr>
+    <tr><td>Condensado de Bose–Einstein (1995)</td><td class="num">≈ 170 nK</td><td>Primer condensado en rubidio (JILA). Estados cuánticos de la materia a escala macroscópica.</td></tr>
+    <tr><td>Récord en tierra (MIT, 2003)</td><td class="num">500 pK</td><td>Gas de sodio. Grupo de Wolfgang Ketterle.</td></tr>
+    <tr><td>Récord en órbita (Tiangong, 2026)</td><td class="num">9.7 pK*</td><td>≈ 20 000 átomos de rubidio en un condensado en la estación espacial china. *La cifra es una temperatura equivalente, obtenida de la velocidad de expansión de la nube, no de un termómetro.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="note" style="margin-top:12px">Los premios Nobel de 1997 (Chu, Cohen-Tannoudji y Phillips, por el enfriamiento láser) y de 2001 (Cornell, Ketterle y Wieman, por el condensado de Bose–Einstein) son la base de este campo.</p>
+
+<!-- 5 -->
+<h2><span class="sec-no">05</span>Cómo se fabrica un gas de átomos fríos</h2>
+<p>Un gas de átomos fríos se produce en dos etapas. Primero, un láser frena los átomos por efecto Doppler: un átomo que se mueve hacia el láser absorbe más fotones del haz de frente que del de atrás, y así pierde velocidad. Esto baja la temperatura a unos cientos de microkelvin. Después, el enfriamiento evaporativo expulsa a los átomos más rápidos de la trampa. Los que quedan se reequilibran a una temperatura más baja. Se repite hasta llegar a nanokelvin.</p>
+<div class="card">
+  <div class="stage-btns" role="group" aria-label="Etapa de la simulación">
+    <button id="btn-laser" aria-pressed="true">Enfriamiento láser</button>
+    <button id="btn-evap" aria-pressed="false">Enfriamiento evaporativo</button>
+    <button id="btn-reset">Reiniciar</button>
+  </div>
+  <canvas id="anim" width="720" height="420" role="img" aria-label="Simulación de átomos en una trampa"></canvas>
+  <div class="row" style="margin-top:12px">
+    <span><span class="lbl">Temperatura relativa</span><br><span id="tRel" class="out">1.000</span></span>
+    <span><span class="lbl">Átomos</span><br><span id="nAt" class="out">400</span></span>
+    <span><span class="lbl">Densidad en el espacio de fases</span><br><span id="psd" class="out">1.00×</span></span>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <label style="flex:1 1 240px">Corte de evaporación (múltiplos de T)
+      <input id="cut" type="range" min="1.5" max="4" step="0.1" value="3">
+    </label>
+    <button id="btn-evapstep">Evaporar un paso</button>
+  </div>
+  <p id="stage-note" class="stage-note">Láser: los átomos pierden velocidad por absorción y reemisión de fotones. La temperatura baja hasta un límite, el límite Doppler.</p>
+</div>
+<div class="card heat">
+  <p style="margin:0">El gas se enfría, pero la entropía no desaparece. Se transfiere a los fotones del láser y al entorno. Por eso el tercer principio no prohíbe enfriar: prohíbe llegar a cero absoluto.</p>
+</div>
+<p class="note">La simulación es pedagógica y no está a escala real: el enfriamiento láser se modela como un amortiguamiento con ruido, y las colisiones de la fase evaporativa se reemplazan por un reequilibrio instantáneo.</p>
+
+
+<!-- 6 -->
+<h2><span class="sec-no">06</span>Atrapar átomos con luz</h2>
+<p>Enfriar no basta: hay que mantener a los átomos en un lugar. Con luz láser se puede construir una trampa porque la fuerza de la luz sobre un átomo depende de la frecuencia y de la intensidad. Una trampa de dipolo usa un haz muy enfocado: el átomo es atraído hacia la zona de mayor intensidad. Una trampa magneto-óptica combina seis haces láser con un campo magnético que cambia con la posición. En la animación se ve el efecto básico: una fuerza que empuja a cada átomo hacia el centro de la trampa.</p>
+<div class="card">
+  <canvas id="trapc" width="720" height="360" role="img" aria-label="Átomos en una trampa láser cuyo centro se puede mover"></canvas>
+  <div class="row" style="margin-top:12px">
+    <label style="flex:1 1 260px">Posición de la trampa: <span id="trapx">0.00</span>
+      <input id="trapslide" type="range" min="-0.6" max="0.6" step="0.01" value="0">
+    </label>
+    <button id="trapdamp" aria-pressed="true">Con amortiguamiento</button>
+  </div>
+  <div class="row" style="margin-top:12px">
+    <span><span class="lbl">Átomos dentro de la trampa</span><br><span id="trapn" class="out">0 / 60</span></span>
+  </div>
+  <p id="trapnote" class="stage-note">Con amortiguamiento, la luz frena a los átomos además de atraerlos. Se quedan cerca del centro y casi no se mueven.</p>
+</div>
+<p class="note">Modelo simplificado en dos dimensiones: fuerza de resorte hacia la trampa y, si está activado, un término de fricción que representa el frenado por luz. No incluye el campo magnético ni la escala real de los haces.</p>
+
+<!-- 7 -->
+<h2><span class="sec-no">07</span>Para qué sirven los átomos fríos</h2>
+<p>Un átomo frío se mueve poco, así que su frecuencia de transición se mide con mucha precisión. Eso permite construir instrumentos que usan la misma física que vimos en la sección 03: a temperaturas muy bajas, la materia se comporta de forma cuántica y se puede controlar átomo por átomo.</p>
+<div class="card key">
+  <span class="law-name">Relojes atómicos</span>
+  <p style="margin-bottom:0">El segundo del Sistema Internacional se define con la transición hiperfina del cesio-133: 9 192 631 770 periodos por segundo. Los relojes de fuente atómica enfrían cesio con láseres, lo lanzan hacia arriba y miden la transición mientras cae. Sostienen la hora de referencia de GPS y de las redes de telecomunicaciones.</p>
+  <span class="law-name">Sensores de gravedad y de rotación</span>
+  <p style="margin-bottom:0">Un interferómetro atómico divide una nube fría en dos caminos y la vuelve a reunir. La diferencia de fase revela aceleraciones y rotaciones con gran sensibilidad. Se usa en la búsqueda de yacimientos, en geodesia y en pruebas de la gravedad.</p>
+  <span class="law-name">Simulación cuántica</span>
+  <p style="margin-bottom:0">Los átomos fríos atrapados en redes de luz imitan el comportamiento de electrones en un sólido. Así se estudian modelos de superconductividad y magnetismo que son difíciles de resolver en una computadora clásica.</p>
+  <span class="law-name">Computación cuántica</span>
+  <p style="margin-bottom:0">Arreglos de átomos individuales atrapados con pinzas ópticas funcionan como qubits. Cada átomo se puede preparar, mover y medir por separado. Es una de las plataformas que se prueban para computadoras cuánticas.</p>
+  <span class="law-name">Física fundamental</span>
+  <p style="margin-bottom:0">Los átomos fríos permiten medir constantes con gran precisión y comprobar predicciones de la mecánica cuántica. El condensado de Bose–Einstein es el ejemplo más claro de materia cuántica a escala macroscópica.</p>
+</div>
+
+<!-- 8 -->
+<h2><span class="sec-no">08</span>El caso extremo: el condensado de Bose–Einstein</h2>
+<p>Cuando un gas de bosones se enfría lo suficiente, una fracción macroscópica de los átomos ocupa el mismo estado cuántico de menor energía. Esto ocurre por debajo de una temperatura crítica, que para un gas uniforme es</p>
+<p class="eq">$$T_c = \frac{2\pi\hbar^2}{m k_B}\left(\frac{n}{\zeta(3/2)}\right)^{2/3}$$</p>
+<p>y la fracción en el estado fundamental crece como $1 - (T/T_c)^{3/2}$. Esa fracción llega a 1 solo en $T = 0$, así que el condensado ilustra el tercer principio: se puede acercar a cero absoluto, pero no alcanzarlo.</p>
+<div class="card key">
+  <span class="law-name">Ver la cámara y las aplicaciones</span>
+  <p style="margin-bottom:0">La cámara de vacío con seis haces láser, la imagen de la nube al pasar por $T_c$, la expansión libre y seis aplicaciones están en una página aparte: <a href="condensado-bose-einstein.html">Condensado de Bose–Einstein</a>. Para que el enlace funcione, guarda ambos archivos en la misma carpeta.</p>
+</div>
+
+<footer>
+  Material para la clase de Termodinámica, Licenciatura en Tecnología, ENES Juriquilla, UNAM. Las fechas y cifras de la tabla 04 provienen de comunicados y artículos de divulgación; conviene verificarlas con la bibliografía del curso antes de citarlas.
+</footer>
+
+</main>
+
+<script>
+(function () {
+  // Utilidades
+  var $ = function (id) { return document.getElementById(id); };
+  var R = 8.314;
+
+  // 1. Cambio de fase
+  var sel = $("fase-sel"), dh = $("dh"), teq = $("teq"), dsOut = $("dsfase");
+  function updateFase() {
+    var dH = parseFloat(dh.value), T = parseFloat(teq.value);
+    var out = (isFinite(dH) && isFinite(T) && T > 0) ? (dH / T) : NaN;
+    dsOut.innerHTML = isFinite(out) ? out.toFixed(1) + "<small>J/(mol·K)</small>" : "—";
+  }
+  sel.addEventListener("change", function () {
+    if (sel.value !== "custom") {
+      var p = sel.value.split(";");
+      dh.value = p[0]; teq.value = p[1];
+    }
+    updateFase();
+  });
+  dh.addEventListener("input", function () { sel.value = "custom"; updateFase(); });
+  teq.addEventListener("input", function () { sel.value = "custom"; updateFase(); });
+  updateFase();
+
+  // 2a. S(T,P) del gas ideal, 1 mol, CP = 5/2 R
+  var tS = $("tslide"), pS = $("pslide"), tV = $("tv"), pV = $("pv"), sTP = $("sTP");
+  function updateSTP() {
+    var T = parseFloat(tS.value), P = parseFloat(pS.value);
+    tV.textContent = T.toFixed(0);
+    pV.textContent = P.toFixed(2);
+    var S = 150.0 + 2.5 * R * Math.log(T / 298) - R * Math.log(P / 1);
+    sTP.innerHTML = S.toFixed(1) + "<small>J/(mol·K)</small>";
+  }
+  tS.addEventListener("input", updateSTP);
+  pS.addEventListener("input", updateSTP);
+  updateSTP();
+
+  // 2b. Gráfica de dos modelos de S(T), anclados en S = S30 a 30 K
+  var cS = $("plotS"), cx = cS.getContext("2d");
+  var T30 = 10, THETA = 100;               // punto de referencia medido a 10 K; temperatura de Debye del modelo, K
+  var A = (4 * Math.pow(Math.PI, 4) / 5) * R / Math.pow(THETA, 3); // S = A T^3 (sólido, ley de Debye a bajas T)
+  var S30 = A * T30 * T30 * T30;           // valor de S en el punto de referencia
+  var sCp = 2.5 * R;                        // C_P constante del gas
+  function sSolid(T) { return A * T * T * T; }   // cumple S(0) = 0 (Planck)
+  // Gas con CP constante, anclado al mismo punto: S(T) = S30 + C ln(T/T30)
+  function sConst(T) { return S30 + sCp * Math.log(T / T30); }
+  var yMin = -40, yMax = 25, xMin = 0.3, xMax = 30;
+  function px(T) { return 56 + (T - xMin) / (xMax - xMin) * (cS.width - 72); }
+  function py(S) { return 16 + (yMax - S) / (yMax - yMin) * (cS.height - 56); }
+  function drawS(curT) {
+    var w = cS.width, h = cS.height;
+    var cs = getComputedStyle(document.documentElement);
+    var ink = cs.getPropertyValue("--ink").trim() || "#132033";
+    var muted = cs.getPropertyValue("--muted").trim() || "#4d5d70";
+    var rule = cs.getPropertyValue("--rule").trim() || "#d5dde6";
+    var ice = cs.getPropertyValue("--ice").trim() || "#1f7fae";
+    var heat = cs.getPropertyValue("--heat").trim() || "#c25a1e";
+    var surf = cs.getPropertyValue("--surface").trim() || "#ffffff";
+    cx.clearRect(0, 0, w, h);
+    cx.fillStyle = surf; cx.fillRect(0, 0, w, h);
+    // ejes y cuadrícula
+    cx.strokeStyle = rule; cx.lineWidth = 1; cx.fillStyle = muted; cx.font = "13px Inter, sans-serif";
+    [-40, -30, -20, -10, 0, 10, 20].forEach(function (s) {
+      cx.beginPath(); cx.moveTo(px(xMin), py(s)); cx.lineTo(px(xMax), py(s)); cx.stroke();
+      cx.fillText(String(s), 14, py(s) + 4);
+    });
+    [0, 5, 10, 15, 20, 25, 30].forEach(function (t) {
+      cx.fillText(t + " K", px(t) - 12, h - 12);
+    });
+    // cero absoluto y ejes
+    cx.strokeStyle = ink; cx.lineWidth = 1.5;
+    cx.beginPath(); cx.moveTo(px(xMin), py(0)); cx.lineTo(px(xMax), py(0)); cx.stroke();
+    cx.fillStyle = ink; cx.fillText("S = 0", px(xMin) + 4, py(0) - 6);
+    // curva de C_P constante (se corta al salir del marco)
+    cx.strokeStyle = heat; cx.lineWidth = 2.5; cx.beginPath();
+    var started = false;
+    for (var T = xMin; T <= xMax; T += 0.1) {
+      var S = sConst(T);
+      if (S < yMin) continue;
+      var X = px(T), Y = py(S);
+      if (!started) { cx.moveTo(X, Y); started = true; } else { cx.lineTo(X, Y); }
+    }
+    cx.stroke();
+    // curva de sólido (Debye)
+    cx.strokeStyle = ice; cx.lineWidth = 2.5; cx.beginPath();
+    for (var T2 = xMin; T2 <= xMax; T2 += 0.1) {
+      var S2 = sSolid(T2) * (T2 > 0 ? 1 : 0);
+      var X2 = px(T2), Y2 = py(S2);
+      if (T2 === xMin) cx.moveTo(X2, Y2); else cx.lineTo(X2, Y2);
+    }
+    cx.stroke();
+    // punto de referencia a 30 K (medida)
+    cx.fillStyle = ink; cx.beginPath(); cx.arc(px(T30), py(S30), 4, 0, 6.2832); cx.fill();
+    // marcador del valor seleccionado
+    cx.strokeStyle = muted; cx.lineWidth = 1; cx.setLineDash([4, 4]);
+    cx.beginPath(); cx.moveTo(px(curT), 16); cx.lineTo(px(curT), py(yMin)); cx.stroke();
+    cx.setLineDash([]);
+    cx.fillStyle = heat; cx.beginPath(); cx.arc(px(curT), py(sConst(curT)), 4.5, 0, 6.2832); cx.fill();
+    cx.fillStyle = ice; cx.beginPath(); cx.arc(px(curT), py(sSolid(curT)), 4.5, 0, 6.2832); cx.fill();
+    cx.fillStyle = muted; cx.fillText("S (J/(mol·K))", 14, 30);
+  }
+  var tcS = $("tcslide"), tcV = $("tcv");
+  function updateCurve() {
+    var T = parseFloat(tcS.value);
+    tcV.textContent = T.toFixed(1);
+    drawS(T);
+  }
+  tcS.addEventListener("input", updateCurve);
+  updateCurve();
+
+  // 5. Simulación de átomos en una trampa armónica 2D
+  var cA = $("anim"), ax = cA.getContext("2d");
+  var N0 = 400, atoms = [], mode = "laser", T0 = 1.0, Tcur = 1.0, rng = Math.random;
+  var btnLaser = $("btn-laser"), btnEvap = $("btn-evap"), btnReset = $("btn-reset");
+  var cut = $("cut"), btnStep = $("btn-evapstep");
+  var tRelOut = $("tRel"), nOut = $("nAt"), psdOut = $("psd"), note = $("stage-note");
+
+  function gauss() {
+    var u = 0, v = 0;
+    while (u === 0) u = rng();
+    while (v === 0) v = rng();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+  function seed(T) {
+    atoms = [];
+    for (var i = 0; i < N0; i++) {
+      var r = Math.sqrt(rng()) * 0.85, th = rng() * 2 * Math.PI;
+      atoms.push({
+        x: r * Math.cos(th), y: r * Math.sin(th),
+        vx: gauss() * Math.sqrt(T), vy: gauss() * Math.sqrt(T)
+      });
+    }
+  }
+  function measureT() {
+    if (atoms.length === 0) return 0;
+    var s = 0;
+    atoms.forEach(function (a) { s += (a.vx * a.vx + a.vy * a.vy) / 2; });
+    return s / atoms.length;   // en 2D, <KE> = kT
+  }
+  function rethermalize(T) {
+    atoms.forEach(function (a) { a.vx = gauss() * Math.sqrt(T); a.vy = gauss() * Math.sqrt(T); });
+  }
+  function reset() {
+    T0 = 1.0; seed(T0); Tcur = T0; setNote();
+  }
+  function setNote() {
+    note.textContent = mode === "laser"
+      ? "Láser: los átomos pierden velocidad por absorción y reemisión de fotones. La temperatura baja hasta un límite, el límite Doppler."
+      : "Evaporativo: se quitan los átomos con energía mayor que el corte y el resto se reequilibra a una temperatura menor. Repita el paso.";
+    btnLaser.setAttribute("aria-pressed", mode === "laser" ? "true" : "false");
+    btnEvap.setAttribute("aria-pressed", mode === "evap" ? "true" : "false");
+  }
+  function laserStep() {
+    var gamma = 0.04, kick = 0.063;
+    atoms.forEach(function (a) {
+      a.vx = a.vx * (1 - gamma) + gauss() * kick;
+      a.vy = a.vy * (1 - gamma) + gauss() * kick;
+      a.x += a.vx * 0.12; a.y += a.vy * 0.12;
+      a.vx -= a.x * 0.02; a.vy -= a.y * 0.02;  // trampa armónica suave
+    });
+    Tcur = measureT();
+  }
+  function moveTrap() {
+    atoms.forEach(function (a) {
+      a.x += a.vx * 0.12; a.y += a.vy * 0.12;
+      a.vx -= a.x * 0.02; a.vy -= a.y * 0.02;
+    });
+    Tcur = measureT();
+  }
+  function evapStep() {
+    var eta = parseFloat(cut.value), T = measureT();
+    var kept = atoms.filter(function (a) { return (a.vx * a.vx + a.vy * a.vy) / 2 <= eta * T; });
+    if (kept.length < 20) return;
+    atoms = kept;
+    var Tnew = measureT();
+    rethermalize(Tnew);
+    Tcur = Tnew;
+  }
+  function draw() {
+    var w = cA.width, h = cA.height;
+    var cs = getComputedStyle(document.documentElement);
+    var surf = cs.getPropertyValue("--surface").trim() || "#ffffff";
+    var rule = cs.getPropertyValue("--rule").trim() || "#d5dde6";
+    var ice = cs.getPropertyValue("--ice").trim() || "#1f7fae";
+    var heat = cs.getPropertyValue("--heat").trim() || "#c25a1e";
+    ax.clearRect(0, 0, w, h);
+    ax.fillStyle = surf; ax.fillRect(0, 0, w, h);
+    var cx0 = w / 2, cy0 = h / 2, sc = Math.min(w, h) * 0.45;
+    ax.strokeStyle = rule; ax.lineWidth = 1;
+    ax.beginPath(); ax.arc(cx0, cy0, sc, 0, 6.2832); ax.stroke();
+    var colRef = Math.max(Tcur, 1e-9), ref = Math.max(T0, 1e-9);
+    atoms.forEach(function (a) {
+      var ke = (a.vx * a.vx + a.vy * a.vy) / 2;
+      var t = Math.min(1, ke / (3 * colRef));
+      ax.fillStyle = mixColor(ice, heat, t);
+      ax.beginPath();
+      ax.arc(cx0 + a.x * sc, cy0 + a.y * sc, 3.2, 0, 6.2832);
+      ax.fill();
+    });
+    var rel = Tcur / ref;
+    tRelOut.textContent = rel.toFixed(3);
+    nOut.textContent = String(atoms.length);
+    var psd = (atoms.length / N0) / (rel * rel);
+    psdOut.textContent = psd.toFixed(2) + "×";
+  }
+  function mixColor(c1, c2, t) {
+    function p(c) {
+      c = c.trim();
+      if (c[0] === "#") {
+        if (c.length === 4) c = "#" + c[1] + c[1] + c[2] + c[2] + c[3] + c[3];
+        return [parseInt(c.substr(1, 2), 16), parseInt(c.substr(3, 2), 16), parseInt(c.substr(5, 2), 16)];
+      }
+      return [120, 120, 120];
+    }
+    var a = p(c1), b = p(c2);
+    var r = Math.round(a[0] + (b[0] - a[0]) * t), g = Math.round(a[1] + (b[1] - a[1]) * t), bl = Math.round(a[2] + (b[2] - a[2]) * t);
+    return "rgb(" + r + "," + g + "," + bl + ")";
+  }
+  var last = 0;
+  function loop(ts) {
+    if (ts - last > 40) {
+      last = ts;
+      if (mode === "laser") laserStep(); else moveTrap();
+      draw();
+    }
+    requestAnimationFrame(loop);
+  }
+  btnLaser.addEventListener("click", function () { mode = "laser"; setNote(); });
+  btnEvap.addEventListener("click", function () { mode = "evap"; setNote(); });
+  btnReset.addEventListener("click", reset);
+  btnStep.addEventListener("click", function () { if (mode === "evap") evapStep(); draw(); });
+  reset();
+  setNote();
+  requestAnimationFrame(loop);
+
+
+  // 6. Trampa láser en dos dimensiones
+  var tcv = $("trapc"), tcx = tcv.getContext("2d");
+  var tSlide = $("trapslide"), tXOut = $("trapx"), tDamp = $("trapdamp"), tN = $("trapn"), tNote = $("trapnote");
+  var TN = 60, tAtoms = [], trapX = 0, damping = true, TK = 1.2, TG = 0.7, TR = 0.25, TBOX = 1.0;
+  function tSeed() {
+    tAtoms = [];
+    for (var i = 0; i < TN; i++) {
+      tAtoms.push({ x: (rng() * 2 - 1) * 0.9, y: (rng() * 2 - 1) * 0.9, vx: 0, vy: 0 });
+    }
+  }
+  function tStep() {
+    var dt = 0.02;
+    for (var sub = 0; sub < 3; sub++) {
+      tAtoms.forEach(function (a) {
+        var fx = -TK * (a.x - trapX), fy = -TK * a.y;
+        if (damping) { fx -= TG * a.vx; fy -= TG * a.vy; }
+        a.vx += fx * dt; a.vy += fy * dt;
+        a.x += a.vx * dt; a.y += a.vy * dt;
+      });
+    }
+  }
+  function tInside(a) {
+    return Math.abs(a.x - trapX) < TR && Math.abs(a.y) < TR;
+  }
+  function tDraw() {
+    var w = tcv.width, h = tcv.height;
+    var cs = getComputedStyle(document.documentElement);
+    var surf = cs.getPropertyValue("--surface").trim() || "#ffffff";
+    var rule = cs.getPropertyValue("--rule").trim() || "#d5dde6";
+    var ice = cs.getPropertyValue("--ice").trim() || "#1f7fae";
+    var heat = cs.getPropertyValue("--heat").trim() || "#c25a1e";
+    var ink = cs.getPropertyValue("--ink").trim() || "#132033";
+    tcx.clearRect(0, 0, w, h);
+    tcx.fillStyle = surf; tcx.fillRect(0, 0, w, h);
+    var cx0 = w / 2, cy0 = h / 2, sc = Math.min(w, h) * 0.42;
+    // borde de la región de observación
+    tcx.strokeStyle = rule; tcx.lineWidth = 1;
+    tcx.strokeRect(cx0 - sc * TBOX, cy0 - sc * TBOX, 2 * sc * TBOX, 2 * sc * TBOX);
+    // haz láser: halo alrededor del centro de la trampa
+    var gx = cx0 + trapX * sc, gy = cy0;
+    var grad = tcx.createRadialGradient(gx, gy, 0, gx, gy, sc * TR * 2.2);
+    grad.addColorStop(0, "rgba(194,90,30,0.35)");
+    grad.addColorStop(1, "rgba(194,90,30,0)");
+    tcx.fillStyle = grad;
+    tcx.beginPath(); tcx.arc(gx, gy, sc * TR * 2.2, 0, 6.2832); tcx.fill();
+    tcx.strokeStyle = heat; tcx.lineWidth = 1.5; tcx.setLineDash([5, 4]);
+    tcx.strokeRect(gx - sc * TR, gy - sc * TR, 2 * sc * TR, 2 * sc * TR);
+    tcx.setLineDash([]);
+    // átomos
+    var inside = 0;
+    tAtoms.forEach(function (a) {
+      var inT = tInside(a);
+      if (inT) inside++;
+      tcx.fillStyle = inT ? ice : muted(cs);
+      tcx.beginPath();
+      tcx.arc(cx0 + a.x * sc, cy0 + a.y * sc, 4, 0, 6.2832);
+      tcx.fill();
+    });
+    tN.textContent = inside + " / " + TN;
+    tXOut.textContent = trapX.toFixed(2);
+  }
+  function muted(cs) { return cs.getPropertyValue("--muted").trim() || "#4d5d70"; }
+  tSlide.addEventListener("input", function () { trapX = parseFloat(tSlide.value); });
+  tDamp.addEventListener("click", function () {
+    damping = !damping;
+    if (!damping) {
+      tAtoms.forEach(function (a) { a.vx += (rng() * 2 - 1) * 0.5; a.vy += (rng() * 2 - 1) * 0.5; });
+    }
+    tDamp.setAttribute("aria-pressed", damping ? "true" : "false");
+    tDamp.textContent = damping ? "Con amortiguamiento" : "Sin amortiguamiento";
+    tNote.textContent = damping
+      ? "Con amortiguamiento, la luz frena a los átomos además de atraerlos. Se quedan cerca del centro y casi no se mueven."
+      : "Sin amortiguamiento, la trampa sigue reteniendo a los átomos, pero oscilan alrededor del centro y no pierden energía.";
+  });
+  tSeed();
+  var tLast = 0;
+  function tLoop(ts) {
+    if (ts - tLast > 16) { tLast = ts; tStep(); tDraw(); }
+    requestAnimationFrame(tLoop);
+  }
+  requestAnimationFrame(tLoop);
+})();
+</script>
+</body>
+</html>
