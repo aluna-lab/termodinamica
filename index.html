@@ -153,6 +153,13 @@ h1{font-family:var(--f-display);font-size:clamp(2rem,4.5vw,3rem);line-height:1.1
       <li><a href="material-tercer-principio-bec/condensado-bose-einstein.html">Condensado de Bose–Einstein</a></li>
     </ul>
   </div>
+  <div class="navgroup">
+    <a href="#g9"><span class="n">9</span><span>Equilibrio termodinámico</span></a>
+    <ul>
+      <li><a href="#g9">Presentación</a></li>
+      <li><a href="material-equilibrio-termodinamico/equilibrio-termodinamico.pdf">Teoría (PDF)</a></li>
+    </ul>
+  </div>
   <div class="navgroup"><a href="#inicio/creditos"><span class="n">·</span><span>Autoría, cita y licencia</span></a></div>
   <p class="foot">Funciona sin conexión. Todo está contenido en este archivo.<br>© 2026 E. Strupiechonski y A. de Luna Bugallo · CC BY 4.0</p>
 </nav>
@@ -162,7 +169,7 @@ h1{font-family:var(--f-display);font-size:clamp(2rem,4.5vw,3rem);line-height:1.1
     <div class="in">
       <header style="display:grid;gap:10px">
         <h1>Guías interactivas de Termodinámica</h1>
-        <p class="lede">Ocho guías para trabajar en clase: ecuaciones de estado, funciones de estado frente a funciones de trayectoria, construcción y cálculo de ciclos, la dependencia de U y H con el volumen y la presión, los motores térmicos y eléctricos, y la entropía de reacción.</p>
+        <p class="lede">Nueve guías para trabajar en clase: ecuaciones de estado, funciones de estado frente a funciones de trayectoria, construcción y cálculo de ciclos, la dependencia de U y H con el volumen y la presión, los motores térmicos y eléctricos, y la entropía de reacción.</p>
       </header>
       <div class="cards">
         <article class="card"><span class="n">1</span>
@@ -205,6 +212,11 @@ h1{font-family:var(--f-display);font-size:clamp(2rem,4.5vw,3rem);line-height:1.1
           <p>Entropía en cambios de fase, ecuaciones fundamentales, enunciados de Nernst y Planck, enfriamiento de átomos y trampas de luz. Incluye el condensado de Bose–Einstein: cámara de vacío, fracción condensada y aplicaciones.</p>
           <div class="subs"><a href="#g8">Tercer principio</a><a href="material-tercer-principio-bec/condensado-bose-einstein.html">Condensado</a></div>
         </article>
+        <article class="card"><span class="n">9</span>
+          <h2><a href="#g9">Equilibrio termodinámico</a></h2>
+          <p>Criterios de equilibrio y espontaneidad a partir de las leyes primera y segunda: funciones A y G, ecuaciones diferenciales, relaciones de Maxwell, verificación con gas ideal, van der Waals, radiación y fase condensada, y preguntas de opción múltiple.</p>
+          <div class="subs"><a href="#g9">Presentación</a><a href="material-equilibrio-termodinamico/equilibrio-termodinamico.pdf">Teoría (PDF)</a></div>
+        </article>
       </div>
       <div class="tips">
         <span>Cada guía conserva lo que hayas movido mientras cambias de una a otra.</span>
@@ -239,6 +251,7 @@ h1{font-family:var(--f-display);font-size:clamp(2rem,4.5vw,3rem);line-height:1.1
   <iframe id="f6" title="Entropía de reacción" hidden></iframe>
   <iframe id="f7" title="Calculadora de ΔS°" hidden></iframe>
   <iframe id="f8" title="Tercer principio y condensado de Bose–Einstein" hidden></iframe>
+  <iframe id="f9" title="Equilibrio termodinámico" hidden></iframe>
 </main>
 
 <script>
@@ -250,15 +263,17 @@ function ensure(g){
   var f=frame(g);
   if(!f.srcdoc){
     f.addEventListener('load',function(){ ready[g]=true; if(pending[g]!==undefined){ f.contentWindow.postMessage({goto:pending[g]},'*'); delete pending[g]; } });
-    if(g==='g8'){ f.src='material-tercer-principio-bec/tercer-principio-clase.html'; } else { f.srcdoc=SRC[g]; }
+    if(g==='g8'){ f.src='material-tercer-principio-bec/tercer-principio-clase.html'; }
+    else if(g==='g9'){ f.src='material-equilibrio-termodinamico/presentacion-equilibrio.html'; }
+    else { f.srcdoc=SRC[g]; }
   }
   return f;
 }
 function route(){
   var h=(location.hash||'#inicio').slice(1), parts=h.split('/'), g=parts[0], sub=parts[1]||'';
-  if(!SRC[g] && g!=='g8') g='inicio';
+  if(!SRC[g] && g!=='g8' && g!=='g9') g='inicio';
   document.getElementById('home').hidden=(g!=='inicio');
-  ['g1','g2','g3','g4','g5','g6','g7','g8'].forEach(function(k){ frame(k).hidden=(k!==g); });
+  ['g1','g2','g3','g4','g5','g6','g7','g8','g9'].forEach(function(k){ frame(k).hidden=(k!==g); });
   if(g==='inicio'){ var hm=document.getElementById('home'), el=sub&&document.getElementById(sub); hm.scrollTo({top: el? el.getBoundingClientRect().top-hm.getBoundingClientRect().top+hm.scrollTop-24 : 0}); }
   if(g!=='inicio'){
     var f=ensure(g);
