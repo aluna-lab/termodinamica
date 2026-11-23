@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Equilibrio termodinámico · Presentación</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;600&family=Inter:wght@400;600&display=swap">
+<script>
+window.MathJax = { tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]] }, svg: { fontCache: "global" }, startup: { typeset: true } };
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style>
+:root{
+  --bg:#FBFAF6; --surface:#FFFFFF; --ink:#14213D; --muted:#4A5568; --rule:#D9DEE6;
+  --acento:#1F7FAE; --calor:#C25A1E; --ok:#2E7D4F; --bad:#B23A3A;
+  --display:"Newsreader", Georgia, "Times New Roman", serif;
+  --body:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1620; --surface:#152131; --ink:#E6EDF5; --muted:#9BADC0; --rule:#2A3A4F;
+    --acento:#6CC4EA; --calor:#F09A5E; --ok:#6FCF97; --bad:#FF8A8A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1620; --surface:#152131; --ink:#E6EDF5; --muted:#9BADC0; --rule:#2A3A4F;
+  --acento:#6CC4EA; --calor:#F09A5E; --ok:#6FCF97; --bad:#FF8A8A; color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg); color:var(--ink); font:18px/1.5 var(--body); overflow:hidden}
+.deck{position:fixed; inset:0; display:flex; flex-direction:column}
+.stage{flex:1; position:relative; overflow:hidden}
+.slide{position:absolute; inset:0; display:none; flex-direction:column; justify-content:center;
+  padding:clamp(20px,5vw,72px) clamp(20px,7vw,110px); gap:clamp(12px,2.2vh,26px); overflow-y:auto}
+.slide.on{display:flex}
+h1,h2{font-family:var(--display); font-weight:600; line-height:1.12; margin:0; text-wrap:balance}
+h1{font-size:clamp(2.2rem,5.4vw,4.4rem)}
+h2{font-size:clamp(1.8rem,3.6vw,2.9rem)}
+p{margin:0; max-width:70ch}
+.eyebrow{font:600 0.8rem/1.2 var(--body); letter-spacing:.14em; text-transform:uppercase; color:var(--acento)}
+.lede{font-size:clamp(1.05rem,2vw,1.35rem); color:var(--muted)}
+.box{background:var(--surface); border:1px solid var(--rule); border-left:4px solid var(--acento); border-radius:10px; padding:clamp(14px,2vw,24px) clamp(16px,2.4vw,30px)}
+.box.calor{border-left-color:var(--calor)}
+.eq{font-size:clamp(1.1rem,2.4vw,1.7rem)}
+.two{display:grid; grid-template-columns:1fr 1fr; gap:clamp(12px,2vw,24px)}
+.three{display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,2vw,20px)}
+@media (max-width:700px){ .two,.three{grid-template-columns:1fr} }
+.small{font-size:0.95rem; color:var(--muted)}
+ul.clean{margin:0; padding-left:1.2em}
+ul.clean li{margin:.35em 0}
+table{border-collapse:collapse; width:100%; font-size:clamp(.85rem,1.6vw,1.05rem)}
+th,td{padding:.55em .7em; border-bottom:1px solid var(--rule); text-align:left; vertical-align:top}
+th{font-weight:600; color:var(--muted)}
+.opts{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+@media (max-width:700px){ .opts{grid-template-columns:1fr} }
+.opt{font:inherit; text-align:left; color:var(--ink); background:var(--surface); border:1px solid var(--rule); border-radius:10px; padding:14px 18px; cursor:pointer}
+.opt:hover{border-color:var(--acento)}
+.opt.ok{border-color:var(--ok); box-shadow:inset 0 0 0 2px var(--ok)}
+.opt.bad{border-color:var(--bad); box-shadow:inset 0 0 0 2px var(--bad)}
+.exp{display:none; margin-top:6px; padding:16px 20px; border-radius:10px; background:var(--surface); border:1px solid var(--rule)}
+.exp.on{display:block}
+.nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px clamp(14px,4vw,40px); border-top:1px solid var(--rule); background:var(--bg)}
+.nav button{font:600 15px var(--body); color:var(--ink); background:var(--surface); border:1px solid var(--rule); border-radius:8px; padding:9px 16px; cursor:pointer}
+.nav button:hover{border-color:var(--acento); color:var(--acento)}
+.nav button:disabled{opacity:.4; cursor:default}
+.count{font:500 14px var(--body); color:var(--muted); font-variant-numeric:tabular-nums}
+.foot{font-size:13px; color:var(--muted)}
+mjx-container[display="true"]{overflow-x:auto; overflow-y:hidden; max-width:100%}
+</style>
+</head>
+<body>
+<div class="deck">
+  <div class="stage" id="stage">
+
+    <!-- 1 Portada -->
+    <section class="slide" data-title="Portada">
+      <p class="eyebrow">Termodinámica · Material de clase</p>
+      <h1>Equilibrio termodinámico</h1>
+      <p class="lede">A partir de la primera y la segunda ley: cinco condiciones, cinco funciones de estado y las relaciones de Maxwell.</p>
+      <p class="foot">Licenciatura en Tecnología · ENES Juriquilla, UNAM</p>
+    </section>
+
+    <!-- 2 Punto de partida -->
+    <section class="slide" data-title="Punto de partida">
+      <p class="eyebrow">1 · Punto de partida</p>
+      <h2>Primera y segunda ley en un solo criterio</h2>
+      <div class="two">
+        <div class="box"><p><b>Primera ley:</b></p><p class="eq">\[dU = \delta Q - \delta W\]</p></div>
+        <div class="box calor"><p><b>Segunda ley (Clausius):</b></p><p class="eq">\[\delta Q \le T\,dS\]</p></div>
+      </div>
+      <p>Con $\delta W = P\,dV$ y la segunda ley en la primera:</p>
+      <div class="box"><p class="eq">\[dU - T\,dS + P\,dV \le 0\]</p>
+        <p class="small" style="margin-top:8px">Menor que cero: proceso espontáneo. Igual a cero: reversible, equilibrio.</p></div>
+    </section>
+
+    <!-- 3 Aislado -->
+    <section class="slide" data-title="Sistema aislado">
+      <p class="eyebrow">2 · Caso 1</p>
+      <h2>Sistema aislado</h2>
+      <p>Sin intercambio de energía ni de volumen: $dU = 0$ y $dV = 0$.</p>
+      <div class="box"><p class="eq">\[-T\,dS \le 0 \;\Rightarrow\; dS \ge 0\]</p></div>
+      <div class="box calor"><p><b>En el equilibrio, $S$ es máxima:</b> $dS = 0$ y $d^2S < 0$.</p></div>
+    </section>
+
+    <!-- 4 S y V -->
+    <section class="slide" data-title="Entropía y volumen constantes">
+      <p class="eyebrow">3 · Caso 2</p>
+      <h2>Entropía y volumen constantes</h2>
+      <p>Con $dS = 0$ y $dV = 0$, el criterio queda:</p>
+      <div class="box"><p class="eq">\[dU \le 0\]</p></div>
+      <div class="box calor"><p><b>En el equilibrio, $U$ es mínima:</b> $dU = 0$ y $d^2U > 0$.</p></div>
+      <p class="small">Forma natural: $U = U(S,V)$.</p>
+    </section>
+
+    <!-- 5 S y P -->
+    <section class="slide" data-title="Entropía y presión constantes">
+      <p class="eyebrow">4 · Caso 3</p>
+      <h2>Entropía y presión constantes</h2>
+      <p>Usamos la entalpía $H = U + PV$, con $dH = dU + P\,dV + V\,dP$.</p>
+      <div class="box"><p class="eq">\[dH - V\,dP - T\,dS \le 0 \;\Rightarrow\;\text{(con }dP=0\text{, }dS=0\text{)}\; dH \le 0\]</p></div>
+      <div class="box calor"><p><b>En el equilibrio, $H$ es mínima:</b> $dH = 0$ y $d^2H > 0$.</p></div>
+    </section>
+
+    <!-- 6 T y V -->
+    <section class="slide" data-title="Temperatura y volumen constantes">
+      <p class="eyebrow">5 · Caso 4</p>
+      <h2>Temperatura y volumen constantes: energía de Helmholtz</h2>
+      <div class="box"><p class="eq">\[A = U - TS, \qquad dA = dU - T\,dS - S\,dT\]</p></div>
+      <p>Con $dT = 0$ y $dV = 0$: $\;dA \le 0$.</p>
+      <div class="box calor"><p><b>En el equilibrio, $A$ es mínima.</b> Interpretación: $-\Delta A$ es el trabajo máximo a $T$ y $V$ constantes.</p></div>
+    </section>
+
+    <!-- 7 T y P -->
+    <section class="slide" data-title="Temperatura y presión constantes">
+      <p class="eyebrow">6 · Caso 5</p>
+      <h2>Temperatura y presión constantes: energía de Gibbs</h2>
+      <div class="box"><p class="eq">\[G = H - TS = U + PV - TS\]</p></div>
+      <p>Con $dT = 0$ y $dP = 0$, el criterio da directamente:</p>
+      <div class="box"><p class="eq">\[dG \le 0\]</p></div>
+      <div class="box calor"><p><b>En el equilibrio, $G$ es mínima:</b> $dG = 0$ y $d^2G > 0$. Es la condición de la mayoría de los experimentos de laboratorio.</p></div>
+    </section>
+
+    <!-- 8 Ejemplo hielo -->
+    <section class="slide" data-title="Ejemplo: fusión del hielo">
+      <p class="eyebrow">Ejemplo</p>
+      <h2>Fusión del hielo a 1 atm</h2>
+      <p class="eq">\[\Delta G(T) = \Delta H_{\text{fus}} - T\,\Delta S_{\text{fus}} = 6010 - 22{,}0\,T \quad \text{(J/mol)}\]</p>
+      <table>
+        <tr><th>Temperatura</th><th>$\Delta G$ (J/mol)</th><th>Resultado</th></tr>
+        <tr><td>263 K</td><td>224</td><td>Fusión no espontánea: se congela</td></tr>
+        <tr><td>273,2 K</td><td>≈ 0</td><td>Equilibrio: hielo y agua coexisten</td></tr>
+        <tr><td>283 K</td><td>−216</td><td>Fusión espontánea: se derrite</td></tr>
+      </table>
+      <p class="small">El equilibrio ocurre en $T = \Delta H/\Delta S$, la misma relación de la sección de cambios de fase.</p>
+    </section>
+
+    <!-- 9 Resumen -->
+    <section class="slide" data-title="Resumen de las cinco condiciones">
+      <p class="eyebrow">Resumen</p>
+      <h2>Cinco condiciones, cinco funciones</h2>
+      <table>
+        <tr><th>Condición</th><th>Fijas</th><th>Potencial</th><th>Espontáneo</th><th>Equilibrio</th></tr>
+        <tr><td>Sistema aislado</td><td>$U$, $V$</td><td>$S$</td><td>$dS \ge 0$</td><td>$S$ máxima</td></tr>
+        <tr><td>$S$ y $V$</td><td>$S$, $V$</td><td>$U$</td><td>$dU \le 0$</td><td>$U$ mínima</td></tr>
+        <tr><td>$S$ y $P$</td><td>$S$, $P$</td><td>$H$</td><td>$dH \le 0$</td><td>$H$ mínima</td></tr>
+        <tr><td>$T$ y $V$</td><td>$T$, $V$</td><td>$A$</td><td>$dA \le 0$</td><td>$A$ mínima</td></tr>
+        <tr><td>$T$ y $P$</td><td>$T$, $P$</td><td>$G$</td><td>$dG \le 0$</td><td>$G$ mínima</td></tr>
+      </table>
+    </section>
+
+    <!-- 10 Diferenciales y variables naturales -->
+    <section class="slide" data-title="Variables naturales">
+      <p class="eyebrow">Variables naturales</p>
+      <h2>Cada diferencial depende de sus variables naturales</h2>
+      <table>
+        <tr><th>Diferencial</th><th>Función de estado</th></tr>
+        <tr><td>\(dU = T\,dS - P\,dV\)</td><td>\(U(S,V)\)</td></tr>
+        <tr><td>\(dH = T\,dS + V\,dP\)</td><td>\(H(S,P)\)</td></tr>
+        <tr><td>\(dA = -S\,dT - P\,dV\)</td><td>\(A(T,V)\)</td></tr>
+        <tr><td>\(dG = -S\,dT + V\,dP\)</td><td>\(G(T,P)\)</td></tr>
+      </table>
+    </section>
+
+    <!-- 11 Derivadas parciales -->
+    <section class="slide" data-title="Derivadas parciales">
+      <p class="eyebrow">Derivadas parciales</p>
+      <h2>Primeras derivadas en variables naturales</h2>
+      <div class="two">
+        <div class="box">
+          <p class="eq">\[T = \left(\frac{\partial U}{\partial S}\right)_V \qquad P = -\left(\frac{\partial U}{\partial V}\right)_S\]</p>
+          <p class="eq">\[T = \left(\frac{\partial H}{\partial S}\right)_P \qquad V = \left(\frac{\partial H}{\partial P}\right)_S\]</p>
+        </div>
+        <div class="box calor">
+          <p class="eq">\[S = -\left(\frac{\partial A}{\partial T}\right)_V \qquad P = -\left(\frac{\partial A}{\partial V}\right)_T\]</p>
+          <p class="eq">\[S = -\left(\frac{\partial G}{\partial T}\right)_P \qquad V = \left(\frac{\partial G}{\partial P}\right)_T\]</p>
+        </div>
+      </div>
+      <p class="small">Regla general: si $dZ = M\,dx + N\,dy$, entonces $M = (\partial Z/\partial x)_y$ y $N = (\partial Z/\partial y)_x$.</p>
+    </section>
+
+    <!-- 12 Maxwell -->
+    <section class="slide" data-title="Relaciones de Maxwell">
+      <p class="eyebrow">Relaciones de Maxwell</p>
+      <h2>Igualdad de derivadas cruzadas</h2>
+      <p>Como $U$, $H$, $A$ y $G$ son funciones de estado, sus segundas derivadas cruzadas coinciden.</p>
+      <div class="box">
+        <p class="eq">\[U(S,V):\quad \left(\frac{\partial T}{\partial V}\right)_S = -\left(\frac{\partial P}{\partial S}\right)_V\]</p>
+        <p class="eq">\[H(S,P):\quad \left(\frac{\partial T}{\partial P}\right)_S = \left(\frac{\partial V}{\partial S}\right)_P\]</p>
+        <p class="eq">\[A(T,V):\quad \left(\frac{\partial S}{\partial V}\right)_T = \left(\frac{\partial P}{\partial T}\right)_V\]</p>
+        <p class="eq">\[G(T,P):\quad \left(\frac{\partial S}{\partial P}\right)_T = -\left(\frac{\partial V}{\partial T}\right)_P\]</p>
+      </div>
+    </section>
+
+    <!-- 13 Verificación 1 -->
+    <section class="slide" data-title="Verificación: gas ideal y van der Waals">
+      <p class="eyebrow">Verificación con ejemplos</p>
+      <h2>Gas ideal y gas de van der Waals</h2>
+      <div class="two">
+        <div class="box">
+          <p><b>Gas ideal</b> ($PV = nRT$, $S = nC_V\ln T + nR\ln V + S_0$)</p>
+          <p class="eq">\[\left(\frac{\partial S}{\partial V}\right)_T = \frac{nR}{V} = \left(\frac{\partial P}{\partial T}\right)_V\]</p>
+          <p class="small">Uso: $\Delta S_T = nR\ln(V_2/V_1)$.</p>
+        </div>
+        <div class="box calor">
+          <p><b>van der Waals</b> ($P = \dfrac{nRT}{V-nb} - \dfrac{an^2}{V^2}$)</p>
+          <p class="eq">\[\left(\frac{\partial S}{\partial V}\right)_T = \frac{nR}{V-nb} = \left(\frac{\partial P}{\partial T}\right)_V\]</p>
+          <p class="small">Uso: $\Delta S_T = nR\ln\dfrac{V_2-nb}{V_1-nb}$. La constante $a$ no aparece.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14 Verificación 2 -->
+    <section class="slide" data-title="Verificación: radiación y fase condensada">
+      <p class="eyebrow">Verificación con ejemplos</p>
+      <h2>Radiación térmica y fase condensada</h2>
+      <div class="two">
+        <div class="box">
+          <p><b>Radiación</b> ($U = aVT^4$, $P = \tfrac{1}{3}aT^4$, $S = \tfrac{4}{3}aVT^3$)</p>
+          <p class="eq">\[\left(\frac{\partial S}{\partial V}\right)_T = \tfrac{4}{3}aT^3 = \left(\frac{\partial P}{\partial T}\right)_V\]</p>
+          <p class="small">Con $U(S,V)$: $-T/(3V)$ y $-4P/(3S)$ son iguales porque $4PV = TS$.</p>
+        </div>
+        <div class="box calor">
+          <p><b>Fase condensada</b> (expansión térmica $\alpha$)</p>
+          <p class="eq">\[\left(\frac{\partial S}{\partial P}\right)_T = -\alpha V\]</p>
+          <p class="small">Agua: $\alpha \approx 2{,}1\times10^{-4}$ K$^{-1}$, $V \approx 1{,}8\times10^{-5}$ m$^3$/mol. Al subir de 1 a 100 bar a $T$ constante, $\Delta S \approx -3{,}7\times10^{-3}$ J/(mol·K).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 15-20 Preguntas -->
+    <section class="slide" data-title="Pregunta 1">
+      <p class="eyebrow">Autoevaluación · 1 de 6</p>
+      <h2>Para un sistema aislado, ¿qué función de estado alcanza un máximo en el equilibrio?</h2>
+      <div class="opts quiz">
+        <button class="opt" data-ok="0">(a) $U$</button>
+        <button class="opt" data-ok="1">(b) $S$</button>
+        <button class="opt" data-ok="0">(c) $G$</button>
+        <button class="opt" data-ok="0">(d) $A$</button>
+      </div>
+      <div class="exp"><b>Respuesta (b).</b> En un sistema aislado $dS \ge 0$; en el equilibrio, $S$ es máxima.</div>
+    </section>
+
+    <section class="slide" data-title="Pregunta 2">
+      <p class="eyebrow">Autoevaluación · 2 de 6</p>
+      <h2>A temperatura y presión constantes, un proceso espontáneo cumple:</h2>
+      <div class="opts quiz">
+        <button class="opt" data-ok="0">(a) $dG \ge 0$</button>
+        <button class="opt" data-ok="1">(b) $dG \le 0$</button>
+        <button class="opt" data-ok="0">(c) $dU \ge 0$</button>
+        <button class="opt" data-ok="0">(d) $dS \le 0$</button>
+      </div>
+      <div class="exp"><b>Respuesta (b).</b> Es el criterio de la condición $T$ y $P$ constantes: $G$ disminuye.</div>
+    </section>
+
+    <section class="slide" data-title="Pregunta 3">
+      <p class="eyebrow">Autoevaluación · 3 de 6</p>
+      <h2>La relación de Maxwell que se obtiene de $A(T,V)$ es:</h2>
+      <div class="opts quiz">
+        <button class="opt" data-ok="0">(a) $(\partial S/\partial V)_T = -(\partial P/\partial T)_V$</button>
+        <button class="opt" data-ok="1">(b) $(\partial S/\partial V)_T = (\partial P/\partial T)_V$</button>
+        <button class="opt" data-ok="0">(c) $(\partial T/\partial V)_S = (\partial P/\partial S)_V$</button>
+        <button class="opt" data-ok="0">(d) $(\partial S/\partial P)_T = (\partial V/\partial T)_P$</button>
+      </div>
+      <div class="exp"><b>Respuesta (b).</b> Es la igualdad de las derivadas cruzadas de $dA = -S\,dT - P\,dV$.</div>
+    </section>
+
+    <section class="slide" data-title="Pregunta 4">
+      <p class="eyebrow">Autoevaluación · 4 de 6</p>
+      <h2>Para un gas de van der Waals, $P = \dfrac{nRT}{V-nb} - \dfrac{an^2}{V^2}$, ¿cuánto vale $(\partial P/\partial T)_V$?</h2>
+      <div class="opts quiz">
+        <button class="opt" data-ok="0">(a) $nR/V$</button>
+        <button class="opt" data-ok="1">(b) $nR/(V-nb)$</button>
+        <button class="opt" data-ok="0">(c) $an^2/V^2$</button>
+        <button class="opt" data-ok="0">(d) $nRT/V^2$</button>
+      </div>
+      <div class="exp"><b>Respuesta (b).</b> Se deriva respecto a $T$ a $V$ fijo; el término $a$ no depende de $T$.</div>
+    </section>
+
+    <section class="slide" data-title="Pregunta 5">
+      <p class="eyebrow">Autoevaluación · 5 de 6</p>
+      <h2>Para radiación térmica con $U = aVT^4$ y $P = \tfrac{1}{3}aT^4$, ¿cuánto vale $(\partial S/\partial V)_T$?</h2>
+      <div class="opts quiz">
+        <button class="opt" data-ok="0">(a) $aT^3$</button>
+        <button class="opt" data-ok="1">(b) $\tfrac{4}{3}aT^3$</button>
+        <button class="opt" data-ok="0">(c) $\tfrac{1}{3}aT^4$</button>
+        <button class="opt" data-ok="0">(d) $4aT^3$</button>
+      </div>
+      <div class="exp"><b>Respuesta (b).</b> Con $S = \tfrac{4}{3}aVT^3$, la derivada es $\tfrac{4}{3}aT^3$, igual a $(\partial P/\partial T)_V$.</div>
+    </section>
+
+    <section class="slide" data-title="Pregunta 6">
+      <p class="eyebrow">Autoevaluación · 6 de 6</p>
+      <h2>Para una fase condensada con expansión térmica $\alpha$, ¿cuál es $(\partial S/\partial P)_T$?</h2>
+      <div class="opts quiz">
+        <button class="opt" data-ok="1">(a) $-\alpha V$</button>
+        <button class="opt" data-ok="0">(b) $\alpha V$</button>
+        <button class="opt" data-ok="0">(c) $-\alpha/V$</button>
+        <button class="opt" data-ok="0">(d) $\alpha V/T$</button>
+      </div>
+      <div class="exp"><b>Respuesta (a).</b> Proviene de $G(T,P)$: $(\partial S/\partial P)_T = -(\partial V/\partial T)_P = -\alpha V$.</div>
+    </section>
+
+    <!-- 21 Cierre -->
+    <section class="slide" data-title="Qué debe recordarse">
+      <p class="eyebrow">Cierre</p>
+      <h2>Qué debe recordarse</h2>
+      <div class="box">
+        <p class="eq">\[dU - T\,dS + P\,dV \le 0\]</p>
+      </div>
+      <ul class="clean lede">
+        <li>Cada condición fija dos variables y convierte el criterio en una afirmación sobre un potencial.</li>
+        <li>El equilibrio corresponde al mínimo de $U$, $H$, $A$ o $G$, o al máximo de $S$ si el sistema está aislado.</li>
+        <li>Las derivadas parciales de cada potencial dan las variables que faltan, y las derivadas cruzadas dan las relaciones de Maxwell.</li>
+      </ul>
+    </section>
+
+  </div>
+  <div class="nav">
+    <button id="prev" aria-label="Anterior">← Anterior</button>
+    <span class="count" id="count"></span>
+    <button id="next" aria-label="Siguiente">Siguiente →</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0, prev = document.getElementById('prev'), next = document.getElementById('next'), count = document.getElementById('count');
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function(s, k){ s.classList.toggle('on', k === i); });
+    prev.disabled = (i === 0); next.disabled = (i === slides.length - 1);
+    count.textContent = (i + 1) + ' / ' + slides.length;
+    if (history.replaceState) history.replaceState(null, '', '#' + (i + 1));
+    document.title = slides[i].getAttribute('data-title') + ' · Equilibrio termodinámico';
+  }
+  prev.addEventListener('click', function(){ show(i - 1); });
+  next.addEventListener('click', function(){ show(i + 1); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || (e.key === ' ' && !e.target.closest('button'))) { e.preventDefault(); show(i + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  });
+  // Preguntas de opción múltiple
+  document.querySelectorAll('.quiz').forEach(function(q){
+    var exp = q.parentNode.querySelector('.exp');
+    q.querySelectorAll('.opt').forEach(function(b){
+      b.addEventListener('click', function(){
+        if (q.dataset.done) return;
+        q.dataset.done = '1';
+        q.querySelectorAll('.opt').forEach(function(o){
+          if (o.dataset.ok === '1') o.classList.add('ok');
+        });
+        if (b.dataset.ok !== '1') b.classList.add('bad');
+        if (exp) exp.classList.add('on');
+        if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([q.parentNode]);
+      });
+    });
+  });
+  var start = parseInt((location.hash || '#1').slice(1), 10);
+  show(isNaN(start) ? 0 : start - 1);
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+})();
+</script>
+</body>
+</html>

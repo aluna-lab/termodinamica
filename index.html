@@ -146,6 +146,13 @@ h1{font-family:var(--f-display);font-size:clamp(2rem,4.5vw,3rem);line-height:1.1
       <li><a href="#g7/trayectoria">Trayectoria calorimétrica</a></li>
     </ul>
   </div>
+  <div class="navgroup">
+    <a href="#g8"><span class="n">8</span><span>Tercer principio y condensado de Bose–Einstein</span></a>
+    <ul>
+      <li><a href="#g8">Tercer principio</a></li>
+      <li><a href="material-tercer-principio-bec/condensado-bose-einstein.html">Condensado de Bose–Einstein</a></li>
+    </ul>
+  </div>
   <div class="navgroup"><a href="#inicio/creditos"><span class="n">·</span><span>Autoría, cita y licencia</span></a></div>
   <p class="foot">Funciona sin conexión. Todo está contenido en este archivo.<br>© 2026 E. Strupiechonski y A. de Luna Bugallo · CC BY 4.0</p>
 </nav>
@@ -155,7 +162,7 @@ h1{font-family:var(--f-display);font-size:clamp(2rem,4.5vw,3rem);line-height:1.1
     <div class="in">
       <header style="display:grid;gap:10px">
         <h1>Guías interactivas de Termodinámica</h1>
-        <p class="lede">Siete guías para trabajar en clase: ecuaciones de estado, funciones de estado frente a funciones de trayectoria, construcción y cálculo de ciclos, la dependencia de U y H con el volumen y la presión, los motores térmicos y eléctricos, y la entropía de reacción.</p>
+        <p class="lede">Ocho guías para trabajar en clase: ecuaciones de estado, funciones de estado frente a funciones de trayectoria, construcción y cálculo de ciclos, la dependencia de U y H con el volumen y la presión, los motores térmicos y eléctricos, y la entropía de reacción.</p>
       </header>
       <div class="cards">
         <article class="card"><span class="n">1</span>
@@ -193,6 +200,11 @@ h1{font-family:var(--f-display);font-size:clamp(2rem,4.5vw,3rem);line-height:1.1
           <p>Arma una reacción con coeficientes y obtén ΔS° al instante, con barras de aporte. Después recorre la trayectoria calorimétrica del agua para ver de dónde sale cada término de S°.</p>
           <div class="subs"><a href="#g7/constructor">Constructor</a><a href="#g7/trayectoria">Trayectoria</a></div>
         </article>
+        <article class="card"><span class="n">8</span>
+          <h2><a href="#g8">Tercer principio y condensado de Bose–Einstein</a></h2>
+          <p>Entropía en cambios de fase, ecuaciones fundamentales, enunciados de Nernst y Planck, enfriamiento de átomos y trampas de luz. Incluye el condensado de Bose–Einstein: cámara de vacío, fracción condensada y aplicaciones.</p>
+          <div class="subs"><a href="#g8">Tercer principio</a><a href="material-tercer-principio-bec/condensado-bose-einstein.html">Condensado</a></div>
+        </article>
       </div>
       <div class="tips">
         <span>Cada guía conserva lo que hayas movido mientras cambias de una a otra.</span>
@@ -226,6 +238,7 @@ h1{font-family:var(--f-display);font-size:clamp(2rem,4.5vw,3rem);line-height:1.1
   <iframe id="f5" title="Motores térmicos" hidden></iframe>
   <iframe id="f6" title="Entropía de reacción" hidden></iframe>
   <iframe id="f7" title="Calculadora de ΔS°" hidden></iframe>
+  <iframe id="f8" title="Tercer principio y condensado de Bose–Einstein" hidden></iframe>
 </main>
 
 <script>
@@ -237,15 +250,15 @@ function ensure(g){
   var f=frame(g);
   if(!f.srcdoc){
     f.addEventListener('load',function(){ ready[g]=true; if(pending[g]!==undefined){ f.contentWindow.postMessage({goto:pending[g]},'*'); delete pending[g]; } });
-    f.srcdoc=SRC[g];
+    if(g==='g8'){ f.src='material-tercer-principio-bec/tercer-principio-clase.html'; } else { f.srcdoc=SRC[g]; }
   }
   return f;
 }
 function route(){
   var h=(location.hash||'#inicio').slice(1), parts=h.split('/'), g=parts[0], sub=parts[1]||'';
-  if(!SRC[g]) g='inicio';
+  if(!SRC[g] && g!=='g8') g='inicio';
   document.getElementById('home').hidden=(g!=='inicio');
-  ['g1','g2','g3','g4','g5','g6','g7'].forEach(function(k){ frame(k).hidden=(k!==g); });
+  ['g1','g2','g3','g4','g5','g6','g7','g8'].forEach(function(k){ frame(k).hidden=(k!==g); });
   if(g==='inicio'){ var hm=document.getElementById('home'), el=sub&&document.getElementById(sub); hm.scrollTo({top: el? el.getBoundingClientRect().top-hm.getBoundingClientRect().top+hm.scrollTop-24 : 0}); }
   if(g!=='inicio'){
     var f=ensure(g);
